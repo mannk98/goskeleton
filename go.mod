@@ -1,4 +1,4 @@
-module github.com/huntelaar112/gotools
+module github.com/mannk98/gotools
 
 go 1.15
 

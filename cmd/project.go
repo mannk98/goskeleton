@@ -5,7 +5,7 @@ import (
 	"os"
 	"text/template"
 
-	"github.com/huntelaar112/gotools/tpl"
+	"github.com/mannk98/gotools/tpl"
 	"github.com/spf13/cobra"
 )
 

@@ -40,8 +40,8 @@ import (
 	"fmt"{{ end }}
 	"os"
 	log "github.com/sirupsen/logrus"
-	"github.com/huntelaar112/netutils"
-	"github.com/huntelaar112/goutils/utils"
+	"github.com/mannk98/netutils"
+	"github.com/mannk98/goutils/utils"
 
 	"github.com/spf13/cobra"
 {{- if .Viper }}
@@ -152,8 +152,8 @@ package cmd
 import (
 	"fmt"
 	"github.com/sirupsen/logrus"
-	"github.com/huntelaar112/netutils"
-	"github.com/huntelaar112/goutils/utils"
+	"github.com/mannk98/netutils"
+	"github.com/mannk98/goutils/utils"
 
 	"github.com/spf13/cobra"
 )
