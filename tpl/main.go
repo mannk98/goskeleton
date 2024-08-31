@@ -53,9 +53,9 @@ var (
 	cfgFile string
 {{- end }}
 	Logger   = log.New()
-	LogLevel = log.ErrorLevel
+	LogLevel = log.DebugLevel
 	LogFile  = "{{ .AppName }}.log"
-	cfgFileDefault = ".{{ .AppName }}"
+	cfgFileDefault = ".{{ .AppName }}.toml"
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -92,8 +92,6 @@ func init() {
 	// will be global for your application.
 {{ if .Viper }}
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.{{ .AppName }}.toml)")
-	gitRepo.SetDefault("cicd.SONAR_TOKEN", "bd57a691af9bcc0559ed1318cfd3ae9ef17e28da")
-	gitRepo.SetDefault("cicd.SONAR_PROJECT_KEY", "")
 {{ else }}
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.{{ .AppName }}.toml)")
 {{ end }}
@@ -128,7 +126,7 @@ func initConfig() {
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			log.Error(".{{ .AppName }} file at ./ folder is not exist. Create it first.")
+			log.Error("Config fifle: .{{ .AppName }} file at ./ folder is not exist. Create it first.")
 		} else {
 			Logger.Error(err)
 		}
@@ -140,6 +138,7 @@ func initConfig() {
 
 func rootRun(cmd *cobra.Command, args []string) {
 	Logger.Info("Program started.")
+	log.Info("Program started.")
 	fmt.Println(viper.GetString("sample"))
 }
 `)
