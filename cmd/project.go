@@ -5,7 +5,7 @@ import (
 	"os"
 	"text/template"
 
-	"github.com/mannk98/gotools/tpl"
+	"github.com/mannk98/goskeleton/tpl"
 	"github.com/spf13/cobra"
 )
 

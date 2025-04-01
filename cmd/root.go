@@ -28,11 +28,11 @@ var (
 	userLicense string
 
 	rootCmd = &cobra.Command{
-		Use:   "gotools",
+		Use:   "goske",
 		Short: "A generator for Cobra based Applications",
 		Long: `Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
-to quickly create a Cobra application. "gotools" is a application base on cobra-cli`,
+to quickly create a Cobra application. "goske" is a application base on cobra-cli`,
 	}
 )
 
@@ -53,8 +53,8 @@ func init() {
 	// lookup variable in config file
 	cobra.CheckErr(viper.BindPFlag("author", rootCmd.PersistentFlags().Lookup("author")))
 	cobra.CheckErr(viper.BindPFlag("useViper", rootCmd.PersistentFlags().Lookup("viper")))
-	viper.SetDefault("author", "mannk khacman98@gmail.com")
-	viper.SetDefault("license", "none")
+	viper.SetDefault("author", "khacman98@gmail.com")
+	viper.SetDefault("license", "MIT")
 
 	rootCmd.AddCommand(addCmd)
 	rootCmd.AddCommand(initCmd)

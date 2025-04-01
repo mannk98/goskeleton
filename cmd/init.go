@@ -59,7 +59,6 @@ Cobra init must be run inside of a go module (please run "go mod init <MODNAME>"
 				cobra.CheckErr(goGet("github.com/spf13/viper"))
 			}
 
-			err = createGitupdateFile()
 			cobra.CheckErr(err)
 			fmt.Printf("Your Cobra application is ready at\n%s\n", projectPath)
 		},
@@ -125,7 +124,9 @@ func parseModInfo() (Mod, CurDir) {
 }
 
 type Mod struct {
-	Path, Dir, GoMod string
+	Path  string
+	Dir   string
+	GoMod string
 }
 
 type CurDir struct {
@@ -142,27 +143,4 @@ func modInfoJSON(args ...string) []byte {
 	cobra.CheckErr(err)
 
 	return out
-}
-
-func createGitupdateFile() error {
-	_, err := os.Create("./gitupdate")
-	if err != nil {
-		return err
-	}
-
-	err = os.Chmod("./gitupdate", 0770)
-	if err != nil {
-		return err
-	}
-
-	content := `
-#!/bin/bash
-
-message="${1}"
-git add .
-git commit -m "${message}"
-git push
-	`
-	err = os.WriteFile("./gitupdate", []byte(content), 0770)
-	return err
 }
