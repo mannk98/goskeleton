@@ -73,12 +73,11 @@ func initializeProject(args []string) (string, error) {
 	}
 
 	if len(args) > 0 {
-		if projectPath != "." {
+		if strings.Contains(projectPath, ".") || string(projectPath[0]) != "/" {
 			wd = fmt.Sprintf("%s/%s", wd, projectPath)
-		} else if !strings.Contains(projectPath, ".") {
+		} else {
 			wd = fmt.Sprintf("%s", projectPath)
 		}
-		// else projectPath="."
 	}
 
 	modName := getModImportPath()
@@ -92,6 +91,7 @@ func initializeProject(args []string) (string, error) {
 		AppName:      path.Base(modName),
 	}
 
+	fmt.Printf("Create go project named %s at %s", project.AppName, project.AbsolutePath)
 	if err := project.Create(); err != nil {
 		return "", err
 	}

@@ -1,4 +1,4 @@
-module github.com/mannk98/goskeleton
+module github.com/mannk98/goske
 
 go 1.15
 

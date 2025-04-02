@@ -16,7 +16,7 @@ package main
 import (
 	"os"
 
-	"github.com/mannk98/goskeleton/cmd"
+	"github.com/mannk98/goske/cmd"
 )
 
 func main() {
