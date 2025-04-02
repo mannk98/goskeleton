@@ -62,8 +62,8 @@ Example: goske add server -> resulting in a new cmd/server.go`,
 				CmdParent: parentName,
 				Project: &Project{
 					AbsolutePath: wd,
-					Legal:        getLicense(),
-					Copyright:    copyrightLine(),
+					Legal:        project_echo_go.getLicense(),
+					Copyright:    project_echo_go.copyrightLine(),
 				},
 			}
 

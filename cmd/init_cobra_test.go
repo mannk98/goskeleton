@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/mannk98/goske/interfaces"
+	"github.com/mannk98/goske/models"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -10,19 +12,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-func getProject() *Project {
-	wd, _ := os.Getwd()
-	return &Project{
-		AbsolutePath: fmt.Sprintf("%s/testproject", wd),
-		Legal:        getLicense(),
-		Copyright:    copyrightLine(),
-		AppName:      "cmd",
-		PkgName:      "github.com/spf13/cobra-cli/cmd/cmd",
-		Viper:        true,
-	}
-}
-
 func TestGoldenInitCmd(t *testing.T) {
+
+	var goSke interfaces.GoskeProject
+	goSke = models.NewProject_Test()
 
 	dir, err := ioutil.TempDir("", "cobra-init")
 	if err != nil {
@@ -49,7 +42,7 @@ func TestGoldenInitCmd(t *testing.T) {
 
 			viper.Set("useViper", true)
 			viper.Set("license", "apache")
-			projectPath, err := initializeProject(tt.args)
+			projectPath, err := goSke.InitializeProject(tt.args)
 			defer func() {
 				if projectPath != "" {
 					os.RemoveAll(projectPath)

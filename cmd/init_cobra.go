@@ -14,19 +14,16 @@
 package cmd
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
-	"os/exec"
-	"path"
-	"path/filepath"
-	"strings"
-
+	"github.com/mannk98/goske/interfaces"
+	"github.com/mannk98/goske/models"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"os/exec"
 )
 
 var (
+	goSke   interfaces.GoskeProject
 	initCmd = &cobra.Command{
 		Use:     "init [path]",
 		Aliases: []string{"initialize", "initialise", "create"},
@@ -52,7 +49,8 @@ Cobra init must be run inside of a go module (please run "go mod init <MODNAME>"
 			return comps, directive
 		},
 		Run: func(_ *cobra.Command, args []string) {
-			projectPath, err := initializeProject(args)
+			goSke = models.NewProject()
+			projectPath, err := goSke.InitializeProject(args)
 			cobra.CheckErr(err)
 			cobra.CheckErr(goGet("github.com/spf13/cobra"))
 			if viper.GetBool("useViper") {
@@ -64,87 +62,6 @@ Cobra init must be run inside of a go module (please run "go mod init <MODNAME>"
 		},
 	}
 )
-
-func initializeProject(args []string) (string, error) {
-	projectPath := args[0]
-	wd, err := os.Getwd()
-	if err != nil {
-		return "", err
-	}
-
-	if len(args) > 0 {
-		if strings.Contains(projectPath, ".") || string(projectPath[0]) != "/" {
-			wd = fmt.Sprintf("%s/%s", wd, projectPath)
-		} else {
-			wd = fmt.Sprintf("%s", projectPath)
-		}
-	}
-
-	modName := getModImportPath()
-
-	project := &Project{
-		AbsolutePath: wd,
-		PkgName:      modName,
-		Legal:        getLicense(),
-		Copyright:    copyrightLine(),
-		Viper:        viper.GetBool("useViper"),
-		AppName:      path.Base(modName),
-	}
-
-	fmt.Printf("Create go project named %s at %s", project.AppName, project.AbsolutePath)
-	if err := project.Create(); err != nil {
-		return "", err
-	}
-
-	return project.AbsolutePath, nil
-}
-
-type Mod struct {
-	Path  string
-	Dir   string
-	GoMod string
-}
-
-type CurDir struct {
-	Dir string
-}
-
-func parseModInfo() (Mod, CurDir) {
-	var mod Mod
-	var dir CurDir
-
-	m := modInfoJSON("-m")
-	cobra.CheckErr(json.Unmarshal(m, &mod))
-
-	// Unsure why, but if no module is present Path is set to this string.
-	if mod.Path == "command-line-arguments" {
-		cobra.CheckErr("Please run `go mod init <MODNAME>` before `cobra-cli init`")
-	}
-
-	e := modInfoJSON("-e")
-	cobra.CheckErr(json.Unmarshal(e, &dir))
-
-	return mod, dir
-}
-
-func getModImportPath() string {
-	mod, cd := parseModInfo()
-	fmt.Printf(fileToURL(strings.TrimPrefix(cd.Dir, mod.Dir)))
-	return path.Join(mod.Path, fileToURL(strings.TrimPrefix(cd.Dir, mod.Dir)))
-}
-
-func fileToURL(in string) string {
-	i := strings.Split(in, string(filepath.Separator))
-	return path.Join(i...)
-}
-
-func modInfoJSON(args ...string) []byte {
-	cmdArgs := append([]string{"list", "-json"}, args...)
-	out, err := exec.Command("go", cmdArgs...).Output()
-	cobra.CheckErr(err)
-
-	return out
-}
 
 func goGet(mod string) error {
 	return exec.Command("go", "get", mod).Run()

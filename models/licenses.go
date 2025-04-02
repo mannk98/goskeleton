@@ -13,10 +13,11 @@
 
 // Parts inspired by https://github.com/ryanuber/go-license
 
-package cmd
+package models
 
 import (
 	"fmt"
+	"github.com/mannk98/goske/cmd"
 	"strings"
 	"time"
 
@@ -58,8 +59,8 @@ func init() {
 // TODO: Inspect project for existing license
 func getLicense() License {
 	// If explicitly flagged, use that.
-	if userLicense != "" {
-		return findLicense(userLicense)
+	if cmd.userLicense != "" {
+		return findLicense(cmd.userLicense)
 	}
 
 	// If user wants to have custom license, use that.

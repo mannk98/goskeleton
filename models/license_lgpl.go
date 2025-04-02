@@ -1,4 +1,4 @@
-package cmd
+package models
 
 func initLgpl() {
 	Licenses["lgpl"] = License{
