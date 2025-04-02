@@ -1,8 +1,9 @@
-package models
+package service
 
 import (
 	"fmt"
-	"github.com/mannk98/goske/tpl"
+	"goske/interfaces"
+	"goske/tpl"
 	"os"
 	"text/template"
 )
@@ -10,11 +11,11 @@ import (
 type Command struct {
 	CmdName   string
 	CmdParent string
-	*Project
+	Project   interfaces.GoskeProject
 }
 
 func (c *Command) Create() error {
-	cmdFile, err := os.Create(fmt.Sprintf("%s/cmd/%s.go", c.AbsolutePath, c.CmdName))
+	cmdFile, err := os.Create(fmt.Sprintf("%s/cmd/%s.go", c.Project.GetAbsolutePath(), c.CmdName))
 	if err != nil {
 		return err
 	}

@@ -1,7 +1,9 @@
-package models
+package service
+
+import "goske/models"
 
 func initLgpl() {
-	Licenses["lgpl"] = License{
+	Licenses["lgpl"] = models.License{
 		Name:            "GNU Lesser General Public License",
 		PossibleMatches: []string{"LGPL-3.0", "lgpl", "lesser gpl", "gnu lgpl"},
 		Header: `

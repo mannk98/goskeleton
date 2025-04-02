@@ -13,10 +13,12 @@
 
 // Parts inspired by https://github.com/ryanuber/go-license
 
-package models
+package service
+
+import "goske/models"
 
 func initApache2() {
-	Licenses["apache"] = License{
+	Licenses["apache"] = models.License{
 		Name:            "Apache 2.0",
 		PossibleMatches: []string{"Apache-2.0", "apache", "apache20", "apache 2.0", "apache2.0", "apache-2.0"},
 		Header: `

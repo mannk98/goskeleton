@@ -1,4 +1,4 @@
-package models
+package service
 
 const (
 	PERMISSION_DIR = 0754

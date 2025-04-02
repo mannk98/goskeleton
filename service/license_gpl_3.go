@@ -13,10 +13,12 @@
 
 // Parts inspired by https://github.com/ryanuber/go-license
 
-package models
+package service
+
+import "goske/models"
 
 func initGpl3() {
-	Licenses["gpl3"] = License{
+	Licenses["gpl3"] = models.License{
 		Name:            "GNU General Public License 3.0",
 		PossibleMatches: []string{"GPL-3.0", "gpl3", "gplv3", "gpl", "gnu gpl3", "gnu gpl"},
 		Header: `

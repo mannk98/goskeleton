@@ -13,35 +13,21 @@
 
 // Parts inspired by https://github.com/ryanuber/go-license
 
-package models
+package service
 
 import (
 	"fmt"
-	"github.com/mannk98/goske/cmd"
-	"strings"
-	"time"
-
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
+	"goske/models"
+	"strings"
 )
 
 // Licenses contains all possible licenses a user can choose from.
-var Licenses = make(map[string]License)
-
-// License represents a software license agreement, containing the Name of
-// the license, its possible matches (on the command line as given to cobra),
-// the header to be used with each file on the file's creating, and the text
-// of the license
-type License struct {
-	Name            string   // The type of license in use
-	PossibleMatches []string // Similar names to guess
-	Text            string   // License text data
-	Header          string   // License header for source files
-}
+var Licenses = make(map[string]models.License)
 
 func init() {
 	// Allows a user to not use a license.
-	Licenses["none"] = License{"None", []string{"none", "false"}, "", ""}
+	Licenses["none"] = models.License{"None", []string{"none", "false"}, "", ""}
 
 	initApache2()
 	initMit()
@@ -57,42 +43,27 @@ func init() {
 // If user didn't specify the license, it returns none
 //
 // TODO: Inspect project for existing license
-func getLicense() License {
+func getLicense(userLicense, license_header, license_text string) models.License {
 	// If explicitly flagged, use that.
-	if cmd.userLicense != "" {
-		return findLicense(cmd.userLicense)
+	if userLicense != "" {
+		return findLicense(userLicense)
 	}
-
-	// If user wants to have custom license, use that.
-	if viper.IsSet("license.header") || viper.IsSet("license.text") {
-		return License{Header: viper.GetString("license.header"),
-			Text: viper.GetString("license.text")}
+	if license_header != "" && license_text != "" {
+		return models.License{Header: license_header,
+			Text: license_text}
 	}
-
-	// If user wants to have built-in license, use that.
-	if viper.IsSet("license") {
-		return findLicense(viper.GetString("license"))
-	}
-
 	// If user didn't set any license, use none by default
 	return Licenses["none"]
 }
 
-func copyrightLine() string {
-	author := viper.GetString("author")
-
-	year := viper.GetString("year") // For tests.
-	if year == "" {
-		year = time.Now().Format("2006")
-	}
-
+func copyrightLine(year, author string) string {
 	return "Copyright © " + year + " " + author
 }
 
 // findLicense looks for License object of built-in licenses.
 // If it didn't find license, then the app will be terminated and
 // error will be printed.
-func findLicense(name string) License {
+func findLicense(name string) models.License {
 	found := matchLicense(name)
 	if found == "" {
 		cobra.CheckErr(fmt.Errorf("unknown license: " + name))

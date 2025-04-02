@@ -15,7 +15,7 @@ package cmd
 
 import (
 	"fmt"
-	"os"
+	"goske/service"
 	"unicode"
 
 	"github.com/spf13/cobra"
@@ -53,23 +53,16 @@ Example: goske add server -> resulting in a new cmd/server.go`,
 				cobra.CheckErr(fmt.Errorf("add needs a name for the command"))
 			}
 
-			wd, err := os.Getwd()
-			cobra.CheckErr(err)
-
 			commandName := validateCmdName(args[0])
-			command := &Command{
+			command := &service.Command{
 				CmdName:   commandName,
 				CmdParent: parentName,
-				Project: &Project{
-					AbsolutePath: wd,
-					Legal:        project_echo_go.getLicense(),
-					Copyright:    project_echo_go.copyrightLine(),
-				},
+				Project:   service.NewProject(),
 			}
 
 			cobra.CheckErr(command.Create())
 
-			fmt.Printf("%s created at %s\n", command.CmdName, command.AbsolutePath)
+			fmt.Printf("%s created at %s\n", command.CmdName, command.Project.GetAbsolutePath())
 		},
 	}
 )

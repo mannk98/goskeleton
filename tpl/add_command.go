@@ -2,8 +2,7 @@ package tpl
 
 func AddCommandTemplate() []byte {
 	return []byte(`/*
-{{ .Project.Copyright }}
-{{ if .Legal.Header }}{{ .Legal.Header }}{{ end }}
+{{ .Project.GetCopyright }}
 */
 package cmd
 

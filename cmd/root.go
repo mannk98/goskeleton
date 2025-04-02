@@ -17,6 +17,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -24,15 +25,18 @@ import (
 
 var (
 	// Used for flags.
-	cfgFile     string
-	userLicense string
+	cfgFile        string
+	userLicense    string
+	license_header string
+	license_text   string
+	author         string
+	year           string
+	viperIsUsed    bool
 
 	rootCmd = &cobra.Command{
 		Use:   "goske",
 		Short: "A generator for Cobra based Applications",
-		Long: `Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application. "goske" is a application base on cobra-cli`,
+		Long:  "",
 	}
 )
 
@@ -49,6 +53,24 @@ func init() {
 	rootCmd.PersistentFlags().StringP("author", "a", "YOUR NAME", "author name for copyright attribution")
 	rootCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "name of license for the project")
 	rootCmd.PersistentFlags().Bool("viper", false, "use Viper for configuration")
+
+	author = viper.GetString("author")
+	year = viper.GetString("year") // For tests.
+	if year == "" {
+		year = time.Now().Format("2006")
+	}
+	// If user wants to have custom license, use that.
+	if userLicense == "" {
+		if viper.IsSet("license.header") || viper.IsSet("license.text") {
+			license_header = viper.GetString("license.header")
+			license_text = viper.GetString("license.text")
+		}
+		// If user wants to have built-in license, use that.
+	} else if viper.IsSet("license") {
+		userLicense = viper.GetString("license")
+	}
+
+	viperIsUsed, _ = rootCmd.Flags().GetBool("viper")
 
 	// lookup variable in config file
 	cobra.CheckErr(viper.BindPFlag("author", rootCmd.PersistentFlags().Lookup("author")))

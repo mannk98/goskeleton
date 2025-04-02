@@ -16,7 +16,7 @@ package main
 import (
 	"os"
 
-	"github.com/mannk98/goske/cmd"
+	"goske/cmd"
 )
 
 func main() {

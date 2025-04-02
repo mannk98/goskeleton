@@ -11,17 +11,17 @@ import (
 func TestGoldenAddCmd(t *testing.T) {
 	viper.Set("useViper", true)
 	viper.Set("license", "apache")
-	command := &Command{
+	command := &service.Command{
 		CmdName:   "test",
 		CmdParent: parentName,
-		Project:   getProject(),
+		Project:   service.NewProject(),
 	}
-	defer os.RemoveAll(command.AbsolutePath)
+	defer os.RemoveAll(command.Project.GetAbsolutePath())
 
-	assertNoErr(t, command.Project.Create())
+	/*assertNoErr(t, command.Project.Create())*/
 	assertNoErr(t, command.Create())
 
-	generatedFile := fmt.Sprintf("%s/cmd/%s.go", command.AbsolutePath, command.CmdName)
+	generatedFile := fmt.Sprintf("%s/cmd/%s.go", command.Project.GetAbsolutePath(), command.CmdName)
 	goldenFile := fmt.Sprintf("testdata/%s.go.golden", command.CmdName)
 	err := compareFiles(generatedFile, goldenFile)
 	if err != nil {

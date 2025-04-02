@@ -13,10 +13,12 @@
 
 // Parts inspired by https://github.com/ryanuber/go-license
 
-package models
+package service
+
+import "goske/models"
 
 func initMit() {
-	Licenses["mit"] = License{
+	Licenses["mit"] = models.License{
 		Name:            "MIT License",
 		PossibleMatches: []string{"MIT", "mit"},
 		Header: `

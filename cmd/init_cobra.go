@@ -15,10 +15,10 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/mannk98/goske/interfaces"
-	"github.com/mannk98/goske/models"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"goske/interfaces"
+	"goske/service"
 	"os/exec"
 )
 
@@ -49,8 +49,8 @@ Cobra init must be run inside of a go module (please run "go mod init <MODNAME>"
 			return comps, directive
 		},
 		Run: func(_ *cobra.Command, args []string) {
-			goSke = models.NewProject()
-			projectPath, err := goSke.InitializeProject(args)
+			goSke = service.NewProject()
+			projectPath, err := goSke.InitializeProject(args, viperIsUsed, userLicense, license_header, license_text, year, author)
 			cobra.CheckErr(err)
 			cobra.CheckErr(goGet("github.com/spf13/cobra"))
 			if viper.GetBool("useViper") {

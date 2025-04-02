@@ -1,7 +1,9 @@
-package models
+package service
+
+import "goske/models"
 
 func initAgpl() {
-	Licenses["agpl"] = License{
+	Licenses["agpl"] = models.License{
 		Name:            "GNU Affero General Public License",
 		PossibleMatches: []string{"AGPL-3.0", "agpl", "affero gpl", "gnu agpl"},
 		Header: `
