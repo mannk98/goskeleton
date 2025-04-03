@@ -7,7 +7,6 @@ import (
 	"goske/tpl"
 	"os"
 	"path"
-	"strings"
 	"text/template"
 )
 
@@ -98,17 +97,18 @@ func (p *Project) create(year, author string) error {
 }
 
 func (p *Project) InitializeProject(args []string, viper bool, userLicense, license_header, license_text, year, author string) (string, error) {
-	projectPath := args[0]
 	wd, err := os.Getwd()
 	if err != nil {
 		return "", err
 	}
 
+	// if init [path] is not empty
 	if len(args) > 0 {
-		if strings.Contains(projectPath, ".") || string(projectPath[0]) != "/" {
-			wd = fmt.Sprintf("%s/%s", wd, projectPath)
-		} else {
+		projectPath := args[0]
+		if string(projectPath[0]) != "/" {
 			wd = fmt.Sprintf("%s", projectPath)
+		} else if string(projectPath[0]) == "." {
+			wd = fmt.Sprintf("%s/%s", wd, projectPath)
 		}
 	}
 

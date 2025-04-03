@@ -7,7 +7,6 @@ import (
 	"goske/tpl"
 	"os"
 	"path"
-	"strings"
 	"text/template"
 )
 
@@ -21,16 +20,16 @@ type EchoProject struct {
 	AppName      string
 }
 
-func NewProjectEcho() *Project {
+func NewProjectEcho() *EchoProject {
 	wd, _ := os.Getwd()
-	return &Project{
+	return &EchoProject{
 		AbsolutePath: fmt.Sprintf("%s", wd),
 	}
 }
 
-func NewProjectEchoTest() *Project {
+func NewProjectEchoTest() *EchoProject {
 	wd, _ := os.Getwd()
-	return &Project{
+	return &EchoProject{
 		AbsolutePath: fmt.Sprintf("%s/testproject", wd),
 		Legal:        getLicense("", "", ""),
 		Copyright:    copyrightLine("2004", "mannk"),
@@ -54,7 +53,7 @@ func (p *EchoProject) createLicenseFile(year, author string) error {
 	return licenseTemplate.Execute(licenseFile, data)
 }
 
-func (p *EchoProject) Create(year, author string) error {
+func (p *EchoProject) create(year, author string) error {
 	// check if AbsolutePath exists
 	if _, err := os.Stat(p.AbsolutePath); os.IsNotExist(err) {
 		// create directory
@@ -136,23 +135,24 @@ func (p *EchoProject) Create(year, author string) error {
 }
 
 func (p *EchoProject) InitializeProject(args []string, viper bool, userLicense, license_header, license_text, year, author string) (string, error) {
-	projectPath := args[0]
 	wd, err := os.Getwd()
 	if err != nil {
 		return "", err
 	}
 
+	// if init [path] is not empty
 	if len(args) > 0 {
-		if strings.Contains(projectPath, ".") || string(projectPath[0]) != "/" {
-			wd = fmt.Sprintf("%s/%s", wd, projectPath)
-		} else {
+		projectPath := args[0]
+		if string(projectPath[0]) != "/" {
 			wd = fmt.Sprintf("%s", projectPath)
+		} else if string(projectPath[0]) == "." {
+			wd = fmt.Sprintf("%s/%s", wd, projectPath)
 		}
 	}
 
 	modName := getModImportPath()
 
-	project := &Project{
+	project := &EchoProject{
 		AbsolutePath: wd,
 		PkgName:      modName,
 		Legal:        getLicense(userLicense, license_header, license_text),

@@ -49,13 +49,13 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	// setup flag, default value, use string
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cobra.yaml)")
+	/*	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.cobra.yaml)")*/
 	rootCmd.PersistentFlags().StringP("author", "a", "YOUR NAME", "author name for copyright attribution")
 	rootCmd.PersistentFlags().StringVarP(&userLicense, "license", "l", "", "name of license for the project")
 	rootCmd.PersistentFlags().Bool("viper", false, "use Viper for configuration")
 
 	author = viper.GetString("author")
-	year = viper.GetString("year") // For tests.
+	year = viper.GetString("year")
 	if year == "" {
 		year = time.Now().Format("2006")
 	}
@@ -73,8 +73,8 @@ func init() {
 	viperIsUsed, _ = rootCmd.Flags().GetBool("viper")
 
 	// lookup variable in config file
-	cobra.CheckErr(viper.BindPFlag("author", rootCmd.PersistentFlags().Lookup("author")))
-	cobra.CheckErr(viper.BindPFlag("useViper", rootCmd.PersistentFlags().Lookup("viper")))
+	/*	cobra.CheckErr(viper.BindPFlag("author", rootCmd.PersistentFlags().Lookup("author")))
+		cobra.CheckErr(viper.BindPFlag("useViper", rootCmd.PersistentFlags().Lookup("viper")))*/
 	viper.SetDefault("author", "khacman98@gmail.com")
 	viper.SetDefault("license", "MIT")
 
@@ -95,8 +95,8 @@ func initConfig() {
 
 		// Search config in home directory with name ".cobra" (without extension).
 		viper.AddConfigPath(home)
-		viper.SetConfigType("yaml")
-		viper.SetConfigName(".cobra")
+		viper.SetConfigType("toml")
+		viper.SetConfigName(".goske")
 	}
 
 	viper.AutomaticEnv()
@@ -105,7 +105,7 @@ func initConfig() {
 
 	notFound := &viper.ConfigFileNotFoundError{}
 	switch {
-	// if err hapend when read config file and it is not onfigFileNotFoundError type
+	// if err happend when read config file and it is not configFileNotFoundError type
 	case err != nil && !errors.As(err, notFound):
 		cobra.CheckErr(err)
 	case err != nil && errors.As(err, notFound):
