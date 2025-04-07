@@ -20,7 +20,6 @@ import (
 	"goske/interfaces"
 	"goske/service"
 	"os/exec"
-	"reflect"
 )
 
 var (
@@ -51,14 +50,12 @@ Cobra init must be run inside of a go module (please run "go mod init <MODNAME>"
 			return comps, directive
 		},
 		Run: func(_ *cobra.Command, args []string) {
-			fmt.Println(*useEcho)
 			if *useEcho {
 				goSke = service.NewProjectEcho()
 			} else {
 				goSke = service.NewProject()
 			}
 
-			fmt.Println(reflect.TypeOf(goSke))
 			projectPath, err := goSke.InitializeProject(args, viperIsUsed, userLicense, license_header, license_text, year, author)
 			cobra.CheckErr(err)
 			cobra.CheckErr(goGet("github.com/spf13/cobra"))
