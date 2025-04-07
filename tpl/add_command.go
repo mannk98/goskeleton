@@ -9,8 +9,8 @@ package cmd
 import (
 	"fmt"
 	"github.com/sirupsen/logrus"
-	"github.com/mannk98/netutils"
-	"github.com/mannk98/goutils/utils"
+	"github.com/mannk98/gonetlibs"
+	"github.com/mannk98/golibs/utils"
 
 	"github.com/spf13/cobra"
 )
